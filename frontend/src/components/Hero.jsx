@@ -19,7 +19,7 @@ function BackgroundIllustration(props) {
       >
         <path
           d="M1025 513c0 282.77-229.23 512-512 512S1 795.77 1 513 230.23 1 513 1s512 229.23 512 512Z"
-          stroke="#9adffc"
+          stroke="#78b9eb"
           strokeOpacity="0.7"
         />
         <path
@@ -36,8 +36,8 @@ function BackgroundIllustration(props) {
             y2="1025"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="#0b82bd" />
-            <stop offset="1" stopColor="#0b82bd" stopOpacity="0" />
+            <stop stopColor="#1780d1" />
+            <stop offset="1" stopColor="#1780d1" stopOpacity="0" />
           </linearGradient>
         </defs>
       </svg>
@@ -49,7 +49,7 @@ function BackgroundIllustration(props) {
       >
         <path
           d="M913 513c0 220.914-179.086 400-400 400S113 733.914 113 513s179.086-400 400-400 400 179.086 400 400Z"
-          stroke="#9adffc"
+          stroke="#dae9f5"
           strokeOpacity="0.7"
         />
         <path
@@ -66,8 +66,8 @@ function BackgroundIllustration(props) {
             y2="913"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="#0b82bd" />
-            <stop offset="1" stopColor="#0b82bd" stopOpacity="0" />
+            <stop stopColor="#1780d1" />
+            <stop offset="1" stopColor="#1780d1" stopOpacity="0" />
           </linearGradient>
         </defs>
       </svg>
@@ -130,7 +130,7 @@ function AppDemo({ custom, animated = false }) {
 
 
 
-export function Hero() {
+const Hero = () => {
   return (
     <div className="overflow-hidden py-20 sm:py-32 lg:pb-32 xl:pb-36 bg-gray-900">
       <Container>
@@ -159,3 +159,6 @@ export function Hero() {
     </div>
   )
 }
+
+
+export default Hero;
