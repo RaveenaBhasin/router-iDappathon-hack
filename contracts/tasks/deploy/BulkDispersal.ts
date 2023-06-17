@@ -1,7 +1,7 @@
 import { task } from "hardhat/config";
 import { TaskArguments } from "hardhat/types";
 
-task("TASK_DEPLOY_BULK_TRANSFER").setAction(async function (
+task("TASK_DEPLOY_BULK_DISPERSAL").setAction(async function (
   _taskArguments: TaskArguments,
   hre
 ) {
@@ -13,10 +13,10 @@ task("TASK_DEPLOY_BULK_TRANSFER").setAction(async function (
   const gatewayContract = deployments[chainId].gatewayContract;
   const feePayerAddress = deployments[chainId].feePayerAddress;
 
-  const deployContract = "BulkTransfer";
+  const deployContract = "BulkDispersal";
 
   console.log("Contract Deployment Started ");
-  const BulkTransfer = await hre.ethers.getContractFactory("BulkTransfer");
+  const BulkTransfer = await hre.ethers.getContractFactory("BulkDispersal");
   const bulkTransfer = await BulkTransfer.deploy(
     gatewayContract,
     feePayerAddress

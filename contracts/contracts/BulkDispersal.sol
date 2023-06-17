@@ -7,9 +7,7 @@ import "@routerprotocol/evm-gateway-contracts/contracts/Utils.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-/// @title BulkTransfer 
-/// @author Yashika Goyal
-contract BulkTransfer is ERC20, IDapp {
+contract BulkDispersal is ERC20, IDapp {
   using SafeERC20 for ERC20;
 
   // address of the owner
@@ -33,10 +31,10 @@ contract BulkTransfer is ERC20, IDapp {
   constructor(
     address payable gatewayAddress,
     string memory feePayerAddress
-  ) ERC20("Bulk Transfer", "BLKTK") {
+  ) ERC20("Bulk", "BLKT2") {
     gatewayContract = IGateway(gatewayAddress);
     owner = msg.sender;
-    _mint(msg.sender, 5000000000000000000000);
+    _mint(msg.sender, 50000000000000000000);
     gatewayContract.setDappMetadata(feePayerAddress);
   }
 
@@ -55,7 +53,6 @@ contract BulkTransfer is ERC20, IDapp {
   }
 
   function mint(address account, uint256 amount) external {
-    require(msg.sender == owner, "only owner");
     _mint(account, amount);
   }
 

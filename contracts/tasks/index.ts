@@ -1,2 +1,2 @@
-import "./deploy/BulkTransfer";
+import "./deploy/BulkDispersal";
 import "./storeDeployments";
