@@ -15,7 +15,7 @@ const Home = () => {
 
   useEffect(() => {
     const isWalletConnected = localStorage.getItem('isWalletConnected') === 'true';
-    if (isWalletConnected) {
+    if (!isWalletConnected) {
       connect();
     }
   }, []);
