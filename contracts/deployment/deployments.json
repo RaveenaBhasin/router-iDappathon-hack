@@ -1,0 +1,12 @@
+{
+  "43113": {
+    "gatewayContract": "0x94caA85bC578C05B22BDb00E6Ae1A34878f047F7",
+    "feePayerAddress": "0xe50b254a5571B59B521e75622C2573067F893132",
+    "BulkTransfer": "0x349f7A902bE79C445121Ef570576da3f9cAe4D2F"
+  },
+  "80001": {
+    "gatewayContract": "0x94caA85bC578C05B22BDb00E6Ae1A34878f047F7",
+    "feePayerAddress": "0xe50b254a5571B59B521e75622C2573067F893132",
+    "BulkTransfer": "0x3E94a27E78a8e701a49b1F6BE2B964DfB874dF83"
+  }
+}
