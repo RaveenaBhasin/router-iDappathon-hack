@@ -5,8 +5,8 @@ import { FaPlus, FaMinus } from 'react-icons/fa';
 const Transfer = ({ isConnected, contract }) => {
 
     const isTransferDisabled = !isConnected;
-
     const [transfers, setTransfers] = useState([{ destChainId: '', recipients: [], amounts: [] }]);
+    const [isTransferSuccessModalOpen, setTransferSuccessModalOpen] = useState(false);
 
     const handleChainIdChange = (index, value) => {
         const updatedTransfers = [...transfers];
@@ -64,9 +64,14 @@ const Transfer = ({ isConnected, contract }) => {
             const tx = await contract.transferBulkCrossChain(filteredTransfers, requestMetadata);
             await tx.wait();
             console.log('Transfers successful!');
+            setTransferSuccessModalOpen(true);
         } catch (error) {
             console.error('Error:', error);
         }
+    };
+
+    const closeModal = () => {
+        setTransferSuccessModalOpen(false);
     };
 
 
@@ -140,13 +145,29 @@ const Transfer = ({ isConnected, contract }) => {
                         </div>
                     ))}
                     <br />
-                    <button 
-                        className="bg-cyan-600 hover:bg-cyan-900 text-white font-bold py-2 px-4 rounded" 
+                    <button
+                        className="bg-cyan-600 hover:bg-cyan-900 text-white font-bold py-2 px-4 rounded"
                         onClick={handleTransfer}
                         disabled={isTransferDisabled}>
                         Transfer
                     </button>
                 </div>
+                {isTransferSuccessModalOpen && (
+                    <div className="fixed inset-0 flex items-center justify-center z-10">
+                        <div className="bg-black text-white p-8 rounded shadow-lg">
+                            <h2 className="text-2xl font-medium mb-4">Transfer Successful!</h2>
+                            <p>Your funds were transferred successfully.</p>
+                            <div className="mt-4">
+                                <button
+                                    className="bg-cyan-600 hover:bg-cyan-900 text-white font-bold py-2 px-4 rounded "
+                                    onClick={closeModal}
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </Container>
         </section>
     )
