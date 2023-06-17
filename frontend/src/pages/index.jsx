@@ -12,14 +12,40 @@ const Home = () => {
   const [contract, setContract] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
   const [selectedNetwork, setSelectedNetwork] = useState('');
+  const [accountBalance, setAccountBalance] = useState('0');
 
   useEffect(() => {
     const isWalletConnected = localStorage.getItem('isWalletConnected') === 'true';
-    if (!isWalletConnected) {
+    if (isWalletConnected) {
       connect();
     }
   }, []);
 
+  const switchToMumbaiNetwork = async () => {
+    try {
+      const result = await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x13881' }],
+      });
+      return result && result.success;
+    } catch (error) {
+      console.error('Error switching to Mumbai network:', error);
+      return false;
+    }
+  };
+
+  const switchToFujiNetwork = async () => {
+    try {
+      const result = await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0xa869' }],
+      });
+      return result && result.success;
+    } catch (error) {
+      console.error('Error switching to Fuji network:', error);
+      return false;
+    }
+  };
 
   const connect = async () => {
     if (window.ethereum) {
@@ -32,10 +58,10 @@ const Home = () => {
         var selectedContractAddress;
 
         if (network.chainId === 80001) {
-          selectedContractAddress = '0xd6958c37Ae5E6CC7fc48b0e476f3bd0d19339aa0';
+          selectedContractAddress = '0x7B263756dB168445FBf911381291e18Cd2dA2f04';
           setSelectedNetwork("Mumbai")
         } else if (network.chainId === 43113) {
-          selectedContractAddress = '0x5606F0a148CF84CECeF5B411a808445583acEB18';
+          selectedContractAddress = '0x71DC940565abC6cAcA722dE8da5c00e72D4f9757';
           setSelectedNetwork("Fuji")
         } else {
           console.error('Unsupported network. Please connect to Mumbai or Fuji testnet.');
@@ -50,6 +76,8 @@ const Home = () => {
         setAccount(account);
         setIsConnected(true);
         localStorage.setItem('isWalletConnected', 'true');
+        const balance = await contract.balanceOf(account);
+        setAccountBalance(balance.toString());
       } catch (error) {
         console.error(error);
       }
@@ -88,6 +116,7 @@ const Home = () => {
     localStorage.setItem('isWalletConnected', 'false');
   };
 
+
   return (
 
     <div>
@@ -98,10 +127,21 @@ const Home = () => {
           content="Cross Chain Fund Transfer Accelerator"
         />
       </Head>
-      <Header isConnected={isConnected} account={account} selectedNetwork={selectedNetwork} handleNetworkChange={handleNetworkChange} connect={connect} disconnect={disconnect} />
+      <Header
+        isConnected={isConnected}
+        account={account}
+        selectedNetwork={selectedNetwork}
+        handleNetworkChange={handleNetworkChange}
+        connect={connect}
+        disconnect={disconnect} />
       <Hero />
-      <Transfer isConnected={isConnected} contract={contract} />
-      <Footer/>
+      <Transfer
+        isConnected={isConnected}
+        contract={contract}
+        account={account}
+        accountBalance={accountBalance}
+        setAccountBalance={setAccountBalance} />
+      <Footer />
     </div>
   )
 }

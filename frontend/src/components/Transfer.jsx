@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Container } from '@/components/Container';
 import { FaPlus, FaMinus } from 'react-icons/fa';
+import { ethers } from 'ethers';
 
-const Transfer = ({ isConnected, contract }) => {
+const Transfer = ({ isConnected, contract, account, accountBalance, setAccountBalance }) => {
 
-    const isTransferDisabled = !isConnected;
+    const isTransferDisabled = !isConnected && accountBalance === '0';
     const [transfers, setTransfers] = useState([{ destChainId: '', recipients: [], amounts: [] }]);
     const [isTransferSuccessModalOpen, setTransferSuccessModalOpen] = useState(false);
 
@@ -26,6 +27,15 @@ const Transfer = ({ isConnected, contract }) => {
         setTransfers(updatedTransfers);
     };
 
+    // const handleAmountChange = (index, value) => {
+    //     const updatedTransfers = [...transfers];
+    //     const amountsInEther = value.split(',').map(parseFloat);
+    //     const amountsInWei = amountsInEther.map((amount) =>
+    //         ethers.utils.parseEther(amount.toString())
+    //     );
+    //     updatedTransfers[index].amounts = amountsInWei;
+    //     setTransfers(updatedTransfers);
+    // };
 
     const handleAddOrRemoveTransfer = (index) => {
         const updatedTransfers = [...transfers];
@@ -37,6 +47,33 @@ const Transfer = ({ isConnected, contract }) => {
         }
 
         setTransfers(updatedTransfers);
+    };
+
+    const formatEther = (value) => {
+        if (!value) return '0.00';
+        return parseFloat(ethers.utils.formatEther(value)).toFixed(3);
+    };
+
+    const handleMintTokens = async () => {
+        try {
+            if (!contract) {
+                console.error('Contract not loaded');
+                return;
+            }
+
+            if (!ethers.utils.isAddress(account)) {
+                console.error('Invalid account address');
+                return;
+            }
+
+            const mintingAmountInWei = ethers.utils.parseEther('500');
+            const tx = await contract.mint(account, mintingAmountInWei);
+            await tx.wait();
+            console.log('Tokens minted successfully!');
+            setAccountBalance(mintingAmountInWei.toString());
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     const handleTransfer = async () => {
@@ -60,8 +97,8 @@ const Transfer = ({ isConnected, contract }) => {
                 return;
             }
 
-            const requestMetadata = "0x000000000007a12000000006fc23ac0000000000000000000000000000000000000000000000000000000000000000000000";
-            const tx = await contract.transferBulkCrossChain(filteredTransfers, requestMetadata);
+            const metadata = "0x000000000007a12000000006fc23ac0000000000000000000000000000000000000000000000000000000000000000000000";
+            const tx = await contract.transferBulkCrossChain(filteredTransfers, metadata);
             await tx.wait();
             console.log('Transfers successful!');
             setTransferSuccessModalOpen(true);
@@ -88,6 +125,16 @@ const Transfer = ({ isConnected, contract }) => {
                     </h2>
                 </div>
                 <div>
+                    <div className="flex gap-4 mt-10">
+                        <h1 className="text-lg">Account Balance: {formatEther(accountBalance)}</h1>
+                        <button
+                            className="bg-cyan-600 hover:bg-cyan-900 text-white font-bold py-2 px-4 rounded"
+                            onClick={handleMintTokens}
+                            disabled={!isConnected || !contract}
+                        >
+                            Mint Test Tokens
+                        </button>
+                    </div>
                     {transfers.map((transfer, index) => (
                         <div key={index}>
                             <h2 className="mt-10 mb-5 text-xl font-medium ">Transfer {index + 1}</h2>
