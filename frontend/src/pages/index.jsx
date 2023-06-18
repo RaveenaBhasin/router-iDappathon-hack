@@ -21,32 +21,6 @@ const Home = () => {
     }
   }, []);
 
-  const switchToMumbaiNetwork = async () => {
-    try {
-      const result = await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x13881' }],
-      });
-      return result && result.success;
-    } catch (error) {
-      console.error('Error switching to Mumbai network:', error);
-      return false;
-    }
-  };
-
-  const switchToFujiNetwork = async () => {
-    try {
-      const result = await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0xa869' }],
-      });
-      return result && result.success;
-    } catch (error) {
-      console.error('Error switching to Fuji network:', error);
-      return false;
-    }
-  };
-
   const connect = async () => {
     if (window.ethereum) {
       try {
@@ -56,7 +30,6 @@ const Home = () => {
         const network = await provider.getNetwork();
         console.log("network", network);
         var selectedContractAddress;
-
         if (network.chainId === 80001) {
           selectedContractAddress = '0x7B263756dB168445FBf911381291e18Cd2dA2f04';
           setSelectedNetwork("Mumbai")
@@ -65,6 +38,7 @@ const Home = () => {
           setSelectedNetwork("Fuji")
         } else {
           console.error('Unsupported network. Please connect to Mumbai or Fuji testnet.');
+          alert('Please switch to the Mumbai or Fuji testnet.');
           return;
         }
         console.log("selectedContractAddress", selectedContractAddress)
